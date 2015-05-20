@@ -60,21 +60,11 @@ public class ListAdapter extends ArrayAdapter<String> {
 
         if(listOfCapturedImages.size() != 0){
 
-            int index = listOfCapturedImages.size() -1;
-            File f = new File(listOfCapturedImages.get(position));
+            // load view holder from async task
 
-            holder.mTextView.setText(getFileName(f));
-
-            // load image from async task
-
-            AsyncTask<String, Integer, Bitmap> loadBitmap = new LoadBitMapImage(holder.mImageView);
+            AsyncTask<String, Integer, Bitmap> loadBitmap = new LoadBitMapImage(holder);
             loadBitmap.execute(listOfCapturedImages.get(position));
-
-
         }
-
-
-
 
         return rowView;
 
@@ -97,10 +87,12 @@ public class ListAdapter extends ArrayAdapter<String> {
 
     public class LoadBitMapImage extends AsyncTask<String, Integer, Bitmap>{
 
-        private ImageView mImageView;
+        private ViewHolder mHolder;
 
-        public LoadBitMapImage(ImageView imageview){
-            mImageView = imageview;
+        private String mNameToDisplay;
+
+        public LoadBitMapImage(ViewHolder holder){
+            mHolder = holder;
         }
 
         @Override
@@ -110,12 +102,16 @@ public class ListAdapter extends ArrayAdapter<String> {
 
             Bitmap bitmap = BitmapFactory.decodeFile(path);
 
+            File f = new File(path);
+
+            mNameToDisplay = getFileName(f);
+
             return bitmap;
         }
 
         protected void onPostExecute(Bitmap result) {
-            mImageView.setImageBitmap(result);
-
+            mHolder.mImageView.setImageBitmap(result);
+            mHolder.mTextView.setText(mNameToDisplay);
         }
 
     }

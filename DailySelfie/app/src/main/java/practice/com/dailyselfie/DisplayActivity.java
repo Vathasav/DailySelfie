@@ -28,7 +28,7 @@ public class DisplayActivity extends Activity {
             imageView = (ImageView) findViewById(R.id.imageView);
             imageView.setImageBitmap(bitmap);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-            //imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
 
 

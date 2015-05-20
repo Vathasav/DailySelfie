@@ -298,10 +298,9 @@ public class DailyActivity extends ActionBarActivity {
     }
 
     private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-     //   String imageFileName = timeStamp.toString()+"_JPEG";
 
+
+        // Create an image file name
         String imageFileName = DateFormat.getDateInstance().format(new Date()).toString()+"_JPEG";
 
 
@@ -373,10 +372,6 @@ public class DailyActivity extends ActionBarActivity {
         super.onStop();
 
         startAlarm();
-
-      /*  if (isFinishing()){
-            startAlarm();
-        }*/
 
 
     }
