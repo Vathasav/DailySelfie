@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <TableRow android:layout_margin="1dip">
+        <LinearLayout
+            android:id="@+id/thumbnail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dip"
+            android:padding="1dip" >
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="80dip"
+                android:layout_height="80dip"
+                 />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img"
+            android:layout_marginLeft="50dip"
+            android:layout_centerVertical="true"
+            android:paddingTop ="10dip"
+            android:textColor="#040404"
+            android:textSize="25dip"
+            android:textStyle="bold"
+            android:typeface="sans" />
+     <!--   <ImageView
+            android:id="@+id/img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:paddingRight="5dp"/>
+
+        <TextView
+            android:paddingTop="2dp"
+            android:id="@+id/txt"
+            android:layout_width="160dp"
+            android:layout_height="100dp"
+            android:layout_column="11" />  -->
+
+
+
+    </TableRow>
+</TableLayout>

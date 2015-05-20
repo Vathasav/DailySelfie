@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="practice.com.dailyselfie" >
+
+    <uses-permission
+        android:name="android.permission.CAMERA" />
+    <uses-feature android:name=
+        "android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.write_external_storage"/>
+
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".DailyActivity"
+            android:label="@string/app_name"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+        </activity>
+
+            <activity android:name=".DisplayActivity"
+            android:label="Display Activity" />
+
+        <receiver android:name=".AlarmReceiver" />
+    </application>
+
+
+
+</manifest>
