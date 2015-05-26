@@ -35,7 +35,7 @@ public class DailyActivity extends ActionBarActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView mImageView;
-    private ArrayList<String> mListOfImages;
+    private ArrayList<PhotoData> mListOfImages;
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
     private ListView mListView;
@@ -43,6 +43,7 @@ public class DailyActivity extends ActionBarActivity {
     private File mphotoFile;
     private final int TWO_MINUTE_INTERVAL = 60000*60;
     static final String IMAGE_ID = "ImageUrl";
+    static final String FILE_NAME_EXTENSION = "_JPEG";
 
     Stack<String> mListOfPaths = new Stack<String>();
 
@@ -117,6 +118,8 @@ public class DailyActivity extends ActionBarActivity {
             // Inflate a menu resource providing context menu items
             MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.contextual_actions, menu);
+
+
             return true;
         }
 
@@ -156,13 +159,14 @@ public class DailyActivity extends ActionBarActivity {
 
             for (File f : myPath.listFiles()) {
 
-                if(f.getAbsolutePath().equals(mode.getTag())){
+                PhotoData photoToRemove = (PhotoData)mode.getTag();
+
+                if(f.getAbsolutePath().equals(photoToRemove.getFile().getAbsolutePath())){
                     f.delete();
 
-                    mListOfImages.remove(mode.getTag());
+                    mListOfImages.remove(photoToRemove);
                     mListAdapter.notifyDataSetChanged();
                 }
-
 
             }
         } catch (Exception ex) {
@@ -185,7 +189,7 @@ public class DailyActivity extends ActionBarActivity {
                 try {
 
                     Intent myIntent = new Intent(getApplicationContext(), DisplayActivity.class);
-                    myIntent.putExtra(IMAGE_ID, mListOfImages.get(position));
+                    myIntent.putExtra(IMAGE_ID, mListOfImages.get(position).getFile().getAbsolutePath());
                     startActivity(myIntent);
                 } catch (Exception e) {
                     // TODO: handle exception
@@ -213,14 +217,15 @@ public class DailyActivity extends ActionBarActivity {
 
     private void displayImages() {
 
-        File myPath = storageDir;;
+        File myPath = storageDir;
 
-        mListOfImages = new ArrayList<String>();
+        mListOfImages = new ArrayList<PhotoData>();
 
         try {
 
             for (File f : myPath.listFiles()) {
-                mListOfImages.add(f.getAbsolutePath());
+                PhotoData newPhoto = new PhotoData(f);
+                mListOfImages.add(newPhoto);
             }
 
 
@@ -228,6 +233,7 @@ public class DailyActivity extends ActionBarActivity {
             Log.w("Error", ex.getMessage());
         }
 
+        mListAdapter.notifyDataSetChanged();
     }
 
 
@@ -299,10 +305,10 @@ public class DailyActivity extends ActionBarActivity {
 
     private File createImageFile() throws IOException {
 
-
         // Create an image file name
-        String imageFileName = DateFormat.getDateInstance().format(new Date()).toString()+"_JPEG";
+        String imageFileName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())+FILE_NAME_EXTENSION;
 
+        // String imageFileName = DateFormat.getDateInstance().format(new Date()).toString()+FILE_NAME_EXTENSION;
 
 
         if (!isExternalStorageWritable()){
@@ -314,12 +320,11 @@ public class DailyActivity extends ActionBarActivity {
 
 
 
-        File image = File.createTempFile(
+     File image =  File.createTempFile(
                 imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-               storageDir      /* directory */
+               ".jpg",         /* suffix */
+              storageDir      /* directory */
         );
-
 
 
 
@@ -331,7 +336,7 @@ public class DailyActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
-            mListOfImages.add(mphotoFile.getAbsolutePath());
+            mListOfImages.add(new PhotoData(mphotoFile));
             mListAdapter.notifyDataSetChanged();
             //displayImages();
 

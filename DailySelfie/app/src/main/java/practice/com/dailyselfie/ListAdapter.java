@@ -14,24 +14,54 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /*
  *List adapter - displays view for each row of the list
  */
-public class ListAdapter extends ArrayAdapter<String> {
+public class ListAdapter extends ArrayAdapter<PhotoData> {
 
 
     private final Activity context;
 
-    private final ArrayList<String> listOfCapturedImages;
+    private final ArrayList<PhotoData> listOfCapturedImages;
 
-    public ListAdapter(Activity context, ArrayList<String> listOfCapturedImages) {
+    public ListAdapter(Activity context, ArrayList<PhotoData> listOfCapturedImages) {
         super(context,R.layout.list_item, listOfCapturedImages);
 
         this.context=context;
         this.listOfCapturedImages = listOfCapturedImages;
 
     }
+
+    @Override
+    public void notifyDataSetChanged(){
+
+        Collections.sort(listOfCapturedImages, dateComparator);
+        super.notifyDataSetChanged();
+
+    }
+
+    Comparator<PhotoData> dateComparator = new Comparator<PhotoData>(){
+
+        public int compare(PhotoData obj1, PhotoData obj2){
+
+            int result = obj1.getDateCreated().compareTo(obj2.getDateCreated());
+
+
+            if (result > 0) {
+                return -1;
+            } else if (result == 0){
+                return 0;
+            }
+
+            return 1;
+
+        }
+
+    };
+
 
     public View getView(int position,View view,ViewGroup parent) {
 
@@ -62,7 +92,7 @@ public class ListAdapter extends ArrayAdapter<String> {
 
             // load view holder from async task
 
-            AsyncTask<String, Integer, Bitmap> loadBitmap = new LoadBitMapImage(holder);
+            AsyncTask<PhotoData, Integer, Bitmap> loadBitmap = new LoadBitMapImage(holder);
             loadBitmap.execute(listOfCapturedImages.get(position));
         }
 
@@ -73,7 +103,7 @@ public class ListAdapter extends ArrayAdapter<String> {
 
     private String getFileName(File f){
 
-        int index = f.getName().indexOf("_JPEG");
+        int index = f.getName().indexOf(DailyActivity.FILE_NAME_EXTENSION);
 
         return f.getName().substring(0,index).toUpperCase();
     }
@@ -85,33 +115,30 @@ public class ListAdapter extends ArrayAdapter<String> {
 
     }
 
-    public class LoadBitMapImage extends AsyncTask<String, Integer, Bitmap>{
+    public class LoadBitMapImage extends AsyncTask<PhotoData, Integer, Bitmap>{
 
         private ViewHolder mHolder;
 
-        private String mNameToDisplay;
+        private PhotoData mPhotoDataToDisplay;
 
         public LoadBitMapImage(ViewHolder holder){
             mHolder = holder;
         }
 
         @Override
-        protected Bitmap doInBackground(String... params) {
+        protected Bitmap doInBackground(PhotoData... params) {
 
-            String path = params[0];
+             mPhotoDataToDisplay = params[0];
 
-            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            Bitmap bitmap = BitmapFactory.decodeFile(mPhotoDataToDisplay.getFile().getAbsolutePath());
 
-            File f = new File(path);
-
-            mNameToDisplay = getFileName(f);
 
             return bitmap;
         }
 
         protected void onPostExecute(Bitmap result) {
             mHolder.mImageView.setImageBitmap(result);
-            mHolder.mTextView.setText(mNameToDisplay);
+            mHolder.mTextView.setText(mPhotoDataToDisplay.getName());
         }
 
     }

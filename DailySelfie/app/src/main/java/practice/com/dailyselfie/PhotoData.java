@@ -2,34 +2,31 @@ package practice.com.dailyselfie;
 
 import java.io.File;
 import java.net.URI;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Messi on 13/05/15.
  */
-public class PhotoData extends File {
+public class PhotoData  {
 
     private String name = null;
 
-    private String fileLocation = null;
+    private File mFile  = null;
+
+    public Date getDateCreated() {
+        return mDateCreated;
+    }
+
+    public void setDateCreated(Date mDateCreated) {
+        this.mDateCreated = mDateCreated;
+    }
+
+    private Date mDateCreated = null;
 
     private String map_location = null;
-
-    public PhotoData(URI uri) {
-        super(uri);
-    }
-
-    public PhotoData(String dirPath, String name) {
-        super(dirPath, name);
-    }
-
-    public PhotoData(String path) {
-        super(path);
-    }
-
-    public PhotoData(File dir, String name) {
-        super(dir, name);
-        this.setName(name);
-    }
 
     public String getName() {
         return name;
@@ -39,14 +36,23 @@ public class PhotoData extends File {
         this.name = name;
     }
 
-    public String getFileLocation() {
-        return fileLocation;
+    public File getFile() {
+        return mFile;
     }
 
-    public void setFileLocation(String fileLocation) {
-        this.fileLocation = fileLocation;
-    }
+    public  PhotoData(File file){
+        this.mFile = file;
+      //  this.name = getFileName(mFile);
+        String fileName = getFileName(mFile);
 
+        try {
+            mDateCreated = new SimpleDateFormat("yyyyMMdd_HHmmss").parse(fileName);//format(new Date())SimpleDateFormat..getDateInstance().parse(fileName);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        this.name = DateFormat.getDateInstance().format(mDateCreated).toString();
+    }
     public String getMap_location() {
         return map_location;
     }
@@ -55,5 +61,11 @@ public class PhotoData extends File {
         this.map_location = map_location;
     }
 
+    private String getFileName(File f){
+
+        int index = f.getName().indexOf(DailyActivity.FILE_NAME_EXTENSION);
+
+        return f.getName().substring(0,index).toUpperCase();
+    }
 
 }
