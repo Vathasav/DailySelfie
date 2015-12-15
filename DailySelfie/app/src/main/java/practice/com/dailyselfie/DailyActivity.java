@@ -31,6 +31,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Stack;
 
+/***
+ * Main activity that is shown when application is initiates
+ * load existing images and didplay appropriate buttons
+ */
+
 public class DailyActivity extends ActionBarActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -151,6 +156,7 @@ public class DailyActivity extends ActionBarActivity {
         }
     };
 
+    // deletes a chosen item
     private void deleteCurrentItem(ActionMode mode) {
 
         File myPath = storageDir;
@@ -214,7 +220,7 @@ public class DailyActivity extends ActionBarActivity {
 
     }
 
-
+    //load images from file and display them
     private void displayImages() {
 
         File myPath = storageDir;
@@ -270,6 +276,7 @@ public class DailyActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // open default camera and capture image
     private void capturePhoto() {
 
         // open camera application
@@ -348,6 +355,7 @@ public class DailyActivity extends ActionBarActivity {
         }
     }
 
+   
     private void deleteFiles() {
 
 
