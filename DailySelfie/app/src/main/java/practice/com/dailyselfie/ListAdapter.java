@@ -43,6 +43,7 @@ public class ListAdapter extends ArrayAdapter<PhotoData> {
 
     }
 
+    // for comparing the date when image has been taken
     Comparator<PhotoData> dateComparator = new Comparator<PhotoData>(){
 
         public int compare(PhotoData obj1, PhotoData obj2){
@@ -62,7 +63,7 @@ public class ListAdapter extends ArrayAdapter<PhotoData> {
 
     };
 
-
+    // inflate the new view and return it
     public View getView(int position,View view,ViewGroup parent) {
 
         View rowView = view;
@@ -115,6 +116,7 @@ public class ListAdapter extends ArrayAdapter<PhotoData> {
 
     }
 
+    // load the image in the background task
     public class LoadBitMapImage extends AsyncTask<PhotoData, Integer, Bitmap>{
 
         private ViewHolder mHolder;
