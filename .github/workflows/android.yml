@@ -27,4 +27,4 @@ jobs:
       run: chmod +x ${{ github.workspace }}/DailySelfie/gradlew
       
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ${{ github.workspace }}/DailySelfie/gradlew build
